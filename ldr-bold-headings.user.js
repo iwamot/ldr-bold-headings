@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         LDR - Bold Headings
 // @namespace    http://iwamot.com/
-// @version      0.0.2
+// @version      0.0.3
 // @description  見出しと思われる部分を見出しっぽくします
 // @author       IWAMOTO Takashi <hello@iwamot.com> http://iwamot.com/
 // @match        http://reader.livedoor.com/reader/*
@@ -28,7 +28,9 @@
         for (var i = 0, j = nodesSnapshot.snapshotLength; i < j; i++) {
           var node = nodesSnapshot.snapshotItem(i);
           if (node.nodeType == 3 || !isBlockElement(node)) {
-            inlineNodes.push(node);
+            if (/[^\t\n\r ]/.test(node.textContent)) {
+              inlineNodes.push(node);
+            }
             continue;
           }
 
