@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         LDR - Bold Headings
 // @namespace    http://iwamot.com/
-// @version      0.0.1
+// @version      0.0.2
 // @description  見出しと思われる部分を見出しっぽくします
 // @author       IWAMOTO Takashi <hello@iwamot.com> http://iwamot.com/
 // @match        http://reader.livedoor.com/reader/*
@@ -22,17 +22,24 @@
           return;
         }
 
-        var nodesSnapshot = document.evaluate('//div[@id="' + divId + '"]/div/text()[string-length(normalize-space()) > 0]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-        for (var i = 0, j = nodesSnapshot.snapshotLength; i < j; i++) {
-          var textNode = nodesSnapshot.snapshotItem(i);
-          var nextSibling = textNode.nextSibling;
-          if (!nextSibling || !isBlockElement(nextSibling)) continue;
+        var nodesSnapshot = document.evaluate('//div[@id="' + divId + '"]/div/node()', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
-          var div = document.createElement('div');
-          div.className = 'LDRBH';
-          var text = document.createTextNode(textNode.data);
-          div.appendChild(text);
-          textNode.parentNode.replaceChild(div, textNode);
+        var inlineNodes = [];
+        for (var i = 0, j = nodesSnapshot.snapshotLength; i < j; i++) {
+          var node = nodesSnapshot.snapshotItem(i);
+          if (node.nodeType == 3 || !isBlockElement(node)) {
+            inlineNodes.push(node);
+            continue;
+          }
+
+          if (inlineNodes.length > 0) {
+            var div = document.createElement('div');
+            div.className = 'LDRBH';
+            inlineNodes.forEach(function(node) {div.appendChild(node.cloneNode(true));});
+            inlineNodes[0].parentNode.insertBefore(div, inlineNodes[0]);
+            inlineNodes.forEach(function(node) {node.parentNode.removeChild(node);});
+            inlineNodes = [];
+          }
         }
       })('item_body_' + item.id);
     });
