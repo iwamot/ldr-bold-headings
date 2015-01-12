@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         LDR - Bold Headings
 // @namespace    http://iwamot.com/
-// @version      0.0.5
+// @version      0.0.6
 // @description  見出しと思われる部分を見出しっぽくします
 // @author       IWAMOTO Takashi <hello@iwamot.com> http://iwamot.com/
 // @match        http://reader.livedoor.com/reader/*
@@ -31,10 +31,10 @@
         for (var i = 0, j = nodesSnapshot.snapshotLength; i < j; i++) {
           var node = nodesSnapshot.snapshotItem(i);
           if (node.nodeType == 3 || !isBlockElement(node)) {
-            if (/[^\t\n\r ]/.test(node.textContent)) {
-              inlineNodes.push(node);
-            } else if (node.tagName && node.tagName.toLowerCase() == 'br') {
+            if (!forHeadings(node)) {
               inlineNodes = [];
+            } else if (/[^\t\n\r ]/.test(node.textContent)) {
+              inlineNodes.push(node);
             }
             continue;
           }
@@ -51,6 +51,17 @@
       })('item_body_' + item.id);
     });
   });
+
+  function forHeadings(node) {
+    var tagName = node.tagName;
+    if (!tagName) return true;
+
+    tagName = tagName.toLowerCase();
+    if (tagName == 'br') return false;
+    if (tagName == 'a' && node.textContent == '続きをみる') return false;
+
+    return true;
+  }
 
   function isBlockElement(node) {
     switch (node.tagName.toLowerCase()) {
