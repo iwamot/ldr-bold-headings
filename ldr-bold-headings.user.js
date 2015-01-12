@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         LDR - Bold Headings
 // @namespace    http://iwamot.com/
-// @version      0.0.4
+// @version      0.0.5
 // @description  見出しと思われる部分を見出しっぽくします
 // @author       IWAMOTO Takashi <hello@iwamot.com> http://iwamot.com/
 // @match        http://reader.livedoor.com/reader/*
@@ -33,6 +33,8 @@
           if (node.nodeType == 3 || !isBlockElement(node)) {
             if (/[^\t\n\r ]/.test(node.textContent)) {
               inlineNodes.push(node);
+            } else if (node.tagName && node.tagName.toLowerCase() == 'br') {
+              inlineNodes = [];
             }
             continue;
           }
