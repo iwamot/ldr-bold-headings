@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         LDR - Bold Headings
 // @namespace    http://iwamot.com/
-// @version      0.0.3
+// @version      0.0.4
 // @description  見出しと思われる部分を見出しっぽくします
 // @author       IWAMOTO Takashi <hello@iwamot.com> http://iwamot.com/
 // @match        http://reader.livedoor.com/reader/*
@@ -11,7 +11,10 @@
 // ==/UserScript==
 
 (function(w) {
-  GM_addStyle('div.LDRBH {font-weight: bold !important; font-size: 1.1em !important; margin-top: 2.2em !important; margin-bottom: 1.1em !important}');
+  GM_addStyle([
+    'div.LDRBH {font-weight: bold !important; font-size: 1.1em !important; margin-top: 2.2em !important; margin-bottom: 1.1em !important}',
+    'div.LDRBH:first-child {margin-top: 1.1em !important;}'
+  ].join(''));
 
   w.register_hook('after_printfeed', function(feed) {
     feed.items.forEach(function(item) {
