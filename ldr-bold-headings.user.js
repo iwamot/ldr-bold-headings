@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         LDR - Bold Headings
 // @namespace    http://iwamot.com/
-// @version      0.0.6
+// @version      0.0.7
 // @description  見出しと思われる部分を見出しっぽくします
 // @author       IWAMOTO Takashi <hello@iwamot.com> http://iwamot.com/
 // @match        http://reader.livedoor.com/reader/*
@@ -43,8 +43,10 @@
             var div = document.createElement('div');
             div.className = 'LDRBH';
             inlineNodes.forEach(function(node) {div.appendChild(node.cloneNode(true));});
-            inlineNodes[0].parentNode.insertBefore(div, inlineNodes[0]);
-            inlineNodes.forEach(function(node) {node.parentNode.removeChild(node);});
+            if (div.textContent.length <= 100) {
+              inlineNodes[0].parentNode.insertBefore(div, inlineNodes[0]);
+              inlineNodes.forEach(function(node) {node.parentNode.removeChild(node);});
+            }
             inlineNodes = [];
           }
         }
