@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         LDR - Bold Headings
 // @namespace    http://iwamot.com/
-// @version      0.0.7
+// @version      0.0.8
 // @description  見出しと思われる部分を見出しっぽくします
 // @author       IWAMOTO Takashi <hello@iwamot.com> http://iwamot.com/
 // @match        http://reader.livedoor.com/reader/*
+// @match        http://reader.livedwango.com/reader/*
 // @grant        GM_addStyle
 // @homepage     https://github.com/iwamot/ldr-bold-headings
 // @updateURL    https://github.com/iwamot/ldr-bold-headings/raw/master/ldr-bold-headings.user.js
